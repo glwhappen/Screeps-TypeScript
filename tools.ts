@@ -13,6 +13,7 @@ export class Tools {
             if(copyFrom[key] !== undefined) {
                 this. copyObjWhenKeyEqual(copyFrom[key], copyTo[key]);
                 if(typeof copyTo[key] != 'object') {
+                    if(copyTo[key] == undefined) continue;
                     // console.log("copy",typeof copyTo[key], typeof copyFrom[key] )
                     copyTo[key] = copyFrom[key];
                 }
