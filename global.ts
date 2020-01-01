@@ -1,32 +1,5 @@
 import {Config} from './config'
-/**
- * 将一个对象中存在的属性和方法，覆盖另一个对象
- * @param copyFrom 要复制的对象
- * @param copyTo 目标对象
- */
-function copyObjWhenKeyEqual(copyFrom: Object, copyTo: Object): void {
-    const keysTo = Object.keys(copyFrom);
-    //console.log("keysToLength:",keysTo.length);
-    //console.log("keysTo", keysTo);
-    if(keysTo[0] == '0') {
-        return ;
-    }
-    for (const key of keysTo) {
-        //console.log(key);
-        if(copyFrom[key] !== undefined) {
-            copyObjWhenKeyEqual(copyFrom[key], copyTo[key]);
-            if(typeof copyTo[key] != 'object') {
-                copyTo[key] = copyFrom[key];
-                //console.log("copy",typeof copyTo[key], typeof copyFrom[key] )
-            }
-        }
-        
-        //     if (copyFrom[key] !== undefined) {
-    //         copyTo[key] = copyFrom[key];
-    //     }
-     }
-    //return copyTo;
-}
+import {Tools} from './tools'
 
 /**
  * 全局变量
@@ -47,23 +20,16 @@ export class Global {
             Global.updateOnce();
             Global.updateOnceFlag = false;
         }
-        
         Global.memory['config'] = Global.config; // 刷新Memory中的config
-
         Global.config.update(); // 更新配置config
         Global.time = time;
     }
     static updateOnce() {
-        // Global.config = Global.memory['config'];
         Global.config = new Config; // 创建config对象，并获取地址
-        console.log('创建',Global.config);
-        // 这里有一个很严重的问题，就是会把所有的配置文件的内容清空
-        copyObjWhenKeyEqual(Global.memory['config'], Global.config);
-        
-        // console.log('复制');
-
-        //Global.config.creep = Global.memory['config'].creep;
-
+        // 如果游戏的Memory中有config，那么用游戏中的把现在创建的存在的key覆盖。
+        if(Global.memory['config'] != undefined) {
+            (new Tools).copyObjWhenKeyEqual(Global.memory['config'], Global.config);
+        }
     }
     /**
      * 开始修改Memory
