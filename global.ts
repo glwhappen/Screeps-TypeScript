@@ -1,6 +1,5 @@
 import {Config} from './config'
 import {Tools} from './tools'
-import {Mem} from './memory'
 
 /**
  * 全局变量
@@ -20,6 +19,7 @@ export class Global {
             Global.updateOnce();
             Global.updateOnceFlag = false;
         }
+        this.updateSlow();
         
         //Mem.start();
         //Mem.memory['config'] = Global.config; // 刷新Memory中的config
@@ -36,5 +36,10 @@ export class Global {
             (new Tools).copyObjWhenKeyEqual(Memory['config'], Global.config);
         }
         //Mem.end();
+    }
+    static updateSlow() {
+        if(Game.time % 5 == 0) {
+            Tools.cleanCreepsMemory();
+        }
     }
 }

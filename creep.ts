@@ -1,9 +1,7 @@
-import {Mem} from './memory'
-
 class RoleBody {
-    work?:number = 2;
-    move?:number = 2;
-    carry?:number = 3;
+    work?:number = 0;
+    move?:number = 0;
+    carry?:number = 0;
 }
 
 class Role {
@@ -13,7 +11,7 @@ class Role {
     body = new RoleBody; // 角色的身体形状
     role:string; // 角色类型
     cost:number; // 当前角色的价值
-    spawnSpeed:number = 20; // 检测数量的速度控制
+    spawnSpeed:number = 10; // 检测数量的速度控制
     update() {
         this.updateLow();
         

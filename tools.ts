@@ -20,4 +20,16 @@ export class Tools {
             }
         }
     }
+    /**
+     * 清理Creeps的内存占用
+     */
+    static cleanCreepsMemory() {
+        for(let name in Memory.creeps) {
+            let creep = Game.creeps[name];
+            if(!creep) {
+                delete Memory.creeps[name];
+                console.log('清理没有使用的 creep memory:', name);
+            }
+        }
+    }
 }
