@@ -1,7 +1,12 @@
 class RoleBody {
     work?:number = 0;
-    move?:number = 0;
+    move?:number = 0; // 移动
     carry?:number = 0;
+    attack?:number = 0;
+    ranged_attack?:number = 0;
+    heal?:number = 0;
+    tough?:number = 0;
+    claim?:number = 0;
 }
 
 class Role {
@@ -12,13 +17,21 @@ class Role {
     role:string; // 角色类型
     cost:number; // 当前角色的价值
     spawnSpeed:number = 10; // 检测数量的速度控制
+    creeps:Creep[];
+    /**
+     * creep工作方式
+     */
+    work(){}
     update() {
         this.updateLow();
-        
+        if(this.creeps) {
+            this.work();
+        }
     }
     private updateLow():void {
         if(Game.time % this.spawnSpeed == 0) { // 缓慢检测数量
-            this.now = _.filter(Game.creeps, (creep) => creep.memory['role'] == this.role).length;
+            this.creeps =  _.filter(Game.creeps, (creep) => creep.memory['role'] == this.role);
+            this.now = this.creeps.length;
             this.spawn();
         }
     }
@@ -58,6 +71,14 @@ class Role {
 }
 class Harvester extends Role {
     role = 'harvester';
+    work() {
+        for(let creep of this.creeps) {
+            creep.say("hello");
+            //console.log(name);
+
+        }
+        //console.log(this.role+"开始工作");
+    }
 }
 /**
  * 管理所有的creep角色
