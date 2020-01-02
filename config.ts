@@ -9,6 +9,7 @@ export class Config {
      * 随着时间更新所有数据
      */
     public update() {
+        //Prototype.update();
         this.creep.update();
     }
 }

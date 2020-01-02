@@ -1,3 +1,5 @@
+import "./creep-extension";
+
 class RoleBody {
     work?:number = 0;
     move?:number = 0; // 移动
@@ -21,11 +23,14 @@ class Role {
     /**
      * creep工作方式
      */
-    work(){}
+    work(creep:Creep){}
     update() {
         this.updateLow();
         if(this.creeps) {
-            this.work();
+            for(let creep of this.creeps) {
+                this.work(creep);
+            }
+            
         }
     }
     private updateLow():void {
@@ -69,15 +74,12 @@ class Role {
         return bodyList;
     }
 }
+
 class Harvester extends Role {
     role = 'harvester';
-    work() {
-        for(let creep of this.creeps) {
-            creep.say("hello");
-            //console.log(name);
-
-        }
-        //console.log(this.role+"开始工作");
+    // 所有harvester将会执行的操作。
+    work(creep:Creep) {
+        creep.say3("hello say3");
     }
 }
 /**
