@@ -1,6 +1,7 @@
 import {Config} from './memory-config'
 import {Tools} from './tools'
 import {Visual} from './visual'
+import {Tower} from './tower'
 
 /**
  * 全局功能调度
@@ -24,10 +25,12 @@ export class Global {
         Global.config.update(); // 更新配置config
 
         Visual.update();
+        Tower.update();
     }
     // 外部不需要调用
     static updateOnce() {
-        Global.config = new Config; // 创建config对象，并获取地址
+        Global.config = new Config; // 创建config对象，并获取地址, 只创建一个
+        Global.config.update();
         // 如果游戏的Memory中有config，那么用游戏中的把现在创建的存在的key覆盖。
         if(Memory['config'] != undefined) {
             (new Tools).copyObjWhenKeyEqual(Memory['config'], Global.config);

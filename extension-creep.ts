@@ -81,15 +81,19 @@ Creep.prototype.fillTowerEnergy = function() {
 }
 // 检查矿石中的能量
 Creep.prototype.checkSourceEnergy = function() {
+    if(this.memory.status == 'checkSourceEnergy'){
+        //console.log("直接");
+        return true;
+    }
     var target = this.pos.findClosestByPath(FIND_SOURCES, {
         filter:(source) => {
             return source.energy > 0;
         }
     });
-    this.say(target.id);
-    console.log(target.id);
+
     if(target) {
         this.memory.target = target;
+        this.memory.status = 'checkSourceEnergy';
         return true;
     } else {
         this.say("没有矿可以挖了");
@@ -99,9 +103,10 @@ Creep.prototype.checkSourceEnergy = function() {
 // 从矿石获取能量
 Creep.prototype.getSourceEnergy = function() {
     var target = this.memory.target;
-    console.log("get", target.id);
     if(this.harvest(target) == ERR_NOT_IN_RANGE) {
         this.moveTo(target, {visualizePathStyle: {stroke: '#ffaa00'}});
+    } else {
+        delete this.memory.status;
     }
 }
 
@@ -148,6 +153,22 @@ Creep.prototype.checkCloseControllerContainerEnergy = function(get) {
     }
     return false;
 }
+// 寻找container
+Creep.prototype.checkContainerEnergy = function() {
+    var room = this.room.name;
+    var target = this.pos.findClosestByPath(FIND_STRUCTURES, {
+        filter : (structure) => {
+            return structure.structureType == STRUCTURE_CONTAINER && 
+            structure.store.getFreeCapacity(RESOURCE_ENERGY) >= (this.store.getUsedCapacity() > 500 ? 500 : this.store.getUsedCapacity());
+        }
+    });
+    if(target) {
+        this.memory.target = target;
+        return true;
+    }
+    return false;
+}
+
 // 填充container
 Creep.prototype.fillContainerEnergy = function() {
     var target = this.memory.target;

@@ -13,24 +13,32 @@ export class Role {
     id:number = 0; // 当前角色编号
     max:number = 0; // 角色的最大数量
     now:number = 0; // 角色的当前数量
-    body = new RoleBody; // 角色的身体形状
+    body:RoleBody; // 角色的身体形状
     role:string; // 角色类型
     cost:number; // 当前角色的价值
     spawnSpeed:number = 10; // 检测数量的速度控制
     creeps:Creep[];
+    updateOnceFlag = true;
     /**
      * creep工作方式
      */
     work(creep:Creep){}
     update() {
-        this.updateLow();
-        if(this.creeps) {
-            for(let creep of this.creeps) {
-                if(!creep) continue;
-                this.work(creep);
-            }
-            
+        if(this.updateOnceFlag) {
+            this.updateOnce();
+            this.updateOnceFlag = false;
         }
+        this.updateLow();
+        // if(this.creeps) {
+        //     for(let creep of this.creeps) {
+        //         if(!creep) continue;
+        //         this.work(creep);
+        //     }
+            
+        // }
+    }
+    private updateOnce() {
+        this.body = new RoleBody; // 角色的身体形状
     }
     private updateLow():void {
         if(Game.time % this.spawnSpeed == 0) { // 缓慢检测数量
@@ -54,7 +62,7 @@ export class Role {
                 this.id++;
                 this.now++;
             } else {
-                console.log('孵化失败',ret,this.getBodyList());
+                //console.log('孵化失败',ret,this.getBodyList());
             }
         }
     }

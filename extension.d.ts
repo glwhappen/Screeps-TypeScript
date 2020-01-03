@@ -35,7 +35,8 @@ declare global {
          * @param {当前是判断能否获取吗，默认为否}} get 
          */
         checkCloseControllerContainerEnergy(get);
-
+        // 检查所有container
+        checkContainerEnergy();
         // 填充container
         fillContainerEnergy();
         
